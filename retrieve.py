@@ -60,10 +60,10 @@ def get_search_items_date_boundry(file_path_comp) :
 
     return search_items_date_boundry
 
-def get_search_results(search_url_comp) :
-    search_results_page_links = get_search_results_page_links(search_url_comp)
+def get_search_results(search_url_full) :
+    search_results_page_links = get_search_results_page_links(search_url_full)
     if len(search_results_page_links) == 1 and search_results_page_links[0] == 'single' :
-        search_result_data = get_search_result_data('single', search_url_comp)
+        search_result_data = get_search_result_data('single', search_url_full)
         print(search_result_data)
     elif len(search_results_page_links) == 1 and search_results_page_links[0] == 'none' :
         search_result_data = {}
@@ -79,16 +79,16 @@ def get_search_results(search_url_comp) :
                     if len(search_result_data):
                         print(search_result_data)
 
-def get_search_results_page_links(search_url_comp) :
+def get_search_results_page_links(search_url_full) :
 
-    response = requests.get(search_url_comp)
+    response = requests.get(search_url_full)
     soup = bs4.BeautifulSoup(response.text, "html.parser")
     search_results_page_links = []
     search_result_page_lists = soup.select('#ResultPageNumbersAll')
     search_result_page_title = soup.title.get_text()
 
     if len(search_result_page_lists) :
-        search_results_page_links.append(search_url_comp)
+        search_results_page_links.append(search_url_full)
         search_result_page_links_list = search_result_page_lists[0].findAll('a')
         for pagenumber in range(len(search_result_page_links_list) - 1) :
             search_results_page_links.append(search_result_page_links_list[pagenumber].get('href'))
@@ -97,7 +97,7 @@ def get_search_results_page_links(search_url_comp) :
             search_results_page_links.append('single')
         else: search_results_page_links.append('none')
     else :
-        search_results_page_links.append(search_url_comp)
+        search_results_page_links.append(search_url_full)
 
     return search_results_page_links
 
@@ -123,11 +123,7 @@ def get_search_result_data(type, search_result_item_link) :
     soup = bs4.BeautifulSoup(response.text, "html.parser")
     search_result_data = {}
 
-    h1_css_selector = ''
-    if type == 'single' :
-        h1_css_selector = '#pageFrame h1'
-    elif type == 'list' :
-        h1_css_selector = 'h1:nth-of-type(2)'
+    h1_css_selector = 'h1:nth-of-type(2)'
     program_sum = soup.select(h1_css_selector)[0].get_text().split(' for ')
     if len(program_sum) == 2 :
         search_result_data['network'] = program_sum[0][0:3]
@@ -178,8 +174,8 @@ if __name__ == '__main__' :
     #search_keywords_list = get_search_keywords_list()
     #for search_keywords in search_keywords_list:
     #    print('====== ' + search_keywords +' ======')
-    #    search_url_comp = search_url_base + search_keywords
-    #    get_search_results(search_url_comp)
+    #    search_url_full = search_url_base + search_keywords
+    #    get_search_results(search_url_full)
     #end_time = time.time()
     #print('Running Time: %f seconds' % (end_time - start_time))
 
