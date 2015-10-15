@@ -27,7 +27,6 @@ search_url_test     = 'http://tvnews.vanderbilt.edu/tvn-processquery.pl?code=tvn
 search_url_base     = 'http://tvnews.vanderbilt.edu/tvn-processquery.pl?'
 search_url_filter_l = 'code=' + search_code + '&Quick=' + search_keyword \
                       + '&searchqualifier=' + search_qualifier + '&submit=' + search_submit
-search_url_filter_m = ''
 search_url_filter_r = '&Network=' + search_network + '&ExcludeCommercials=' + search_comm_exclude \
                       + '&reporters=' + search_reporters + '&SortOrder=' + search_sort_order + '&RC=' + search_RC
 
@@ -51,7 +50,7 @@ def get_search_items_date_boundry(file_path_comp) :
         search_item_date_boundry = {}
         xls_lower_date = xls_content.cell(xls_row, 3).value.lstrip().split(' ')
         xls_upper_date = xls_content.cell(xls_row, 4).value.lstrip().split(' ')
-        search_item_date_boundry['Month'] = datetime.datetime.strptime(xls_upper_date[0], '%B').strftime('%m').lstrip('0')
+        search_item_date_boundry['Month'] = datetime.datetime.strptime(xls_lower_date[0], '%B').strftime('%m').lstrip('0')
         search_item_date_boundry['Date'] = xls_lower_date[1].rstrip(',')
         search_item_date_boundry['Year'] = xls_lower_date[2]
         search_item_date_boundry['EndMonth'] =  datetime.datetime.strptime(xls_upper_date[0], '%B').strftime('%m').lstrip('0')
@@ -70,11 +69,7 @@ def get_search_results(search_url_comp) :
         search_result_data = {}
         print(search_result_data)
     else :
-        # ct = 0;
         for search_results_page_link in search_results_page_links :
-        #    ct += 1
-        #    if ct > 5 :
-        #        break
             print(search_results_page_link)
             search_result_items = get_search_results_items(search_results_page_link)
             for search_result_item in search_result_items :
@@ -83,7 +78,6 @@ def get_search_results(search_url_comp) :
                     search_result_data = get_search_result_data('list', search_result_item_link)
                     if len(search_result_data):
                         print(search_result_data)
-        #                break
 
 def get_search_results_page_links(search_url_comp) :
 
@@ -170,6 +164,7 @@ if __name__ == '__main__' :
 
     search_items_date_boundry = get_search_items_date_boundry(file_path_comp)
     for search_item_dates_boundry in search_items_date_boundry :
+        search_url_filter_m = ''
         search_url_filter_m += '&Month=' + search_item_dates_boundry['Month'] \
                                + '&Date=' + search_item_dates_boundry['Date'] \
                                + '&Year=' + search_item_dates_boundry['Year'] \
