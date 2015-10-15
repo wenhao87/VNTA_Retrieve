@@ -6,8 +6,8 @@ import bs4
 import xlrd
 import time
 import datetime
-# import argparse
-# from multiprocessing import Pool
+import argparse
+from multiprocessing import Pool
 
 file_path_base  = '/Users/whchen/Desktop/'
 file_path_name  = 'fire_events.xls'
@@ -177,13 +177,7 @@ if __name__ == '__main__' :
                                + '&EndDay=' + search_item_dates_boundry['EndDay'] \
                                + '&EndYear=' + search_item_dates_boundry['EndYear']
         search_url_full = search_url_base + search_url_filter_l + search_url_filter_m + search_url_filter_r
-        #print(search_url_full)
         get_search_results(search_url_full)
-
-    #print(search_items_date_boundry)
-    #print(search_url_test)
-    #search_url_full = search_url_base + search_url_filter
-
 
     #start_time = time.time()
     #search_keywords_list = get_search_keywords_list()
@@ -192,8 +186,8 @@ if __name__ == '__main__' :
     #    search_url_comp = search_url_base + search_keywords
     #    get_search_results(search_url_comp)
     #end_time = time.time()
-
     #print('Running Time: %f seconds' % (end_time - start_time))
+
     print('Goodbye')
 
 
